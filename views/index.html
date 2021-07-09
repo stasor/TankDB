@@ -1,102 +1,95 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<title>TankDB</title>
 <head>
-<link rel="stylesheet" href="style.css">
+    <title>TankDB</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="navBar">
-    <a class="active" href="/">Home</a>
-    <button class="open-button" onclick="openForm()">Add new tank</button>
-    <form class="search" action="search" method="post">
-      <input  type="text" name="input" placeholder="Search">
-      <input  type="submit" value="Submit">
-    </form>
-</div>
+    <div class="navBar">
+        <a class="active" href="/">Home</a>
+        <button class="open-button" onclick="openForm()">Add new tank</button>
+        <form class="search" action="search" method="post">
+            <input type="text" name="input" placeholder="Search">
+            <input type="submit" onclick="getTanks()" action="/add" value="Submit">
+        </form>
+    </div>
 
-<div class="form-popup" id="myForm">
-  <form action="/add" class="form-container" method="post">
-    <!-- 
-      <input type="file"  accept="image/jpg" name="image" id="img_upload" onchange="savePic(event)">
-    -->
+    <div class="form-popup" id="myForm">
+        <form action="/add" class="form-container" method="post">
+            <!--
+              <input type="file"  accept="image/jpg" name="image" id="img_upload" onchange="savePic(event)">
+            -->
 
-    <label for="name"><b>Name:</b></label>
-    <input type="text" name="name" required>
+            <label for="name"><b>Name:</b></label>
+            <input type="text" name="name" required>
 
-    <label for="width"><b>Width:</b></label>
-    <input type="text" name="width" required>
+            <label for="width"><b>Width:</b></label>
+            <input type="text" name="width" required>
 
-    <label for="length"><b>Length:</b></label>
-    <input type="text" name="length" required>
+            <label for="length"><b>Length:</b></label>
+            <input type="text" name="length" required>
 
-    <label for="height"><b>Height:</b></label>
-    <input type="text" name="height" required>
+            <label for="height"><b>Height:</b></label>
+            <input type="text" name="height" required>
 
-    <label for="weight"><b>Weight:</b></label>
-    <input type="text" name="weight" required>
+            <label for="weight"><b>Weight:</b></label>
+            <input type="text" name="weight" required>
 
-    <button type="submit" class="btn">Submit</button>
-    <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
-  </form>
-</div> 
+            <button type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
 
-<div>
-  <ul id="tanksList"> </ul>
-</div>
+    <div>
+        <ul id="tanksList"> </ul>
+    </div>
+
+        <div class="container">
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th data-field="idTanks">Tank Id</th>
+                        <th data-field="name">Tank Name</th>
+                        <th data-field="lenght">Tank Length</th>
+                        <th data-field="height">Tank Height</th>
+                        <th data-field="width">Tank Width</th>
+                        <th data-field="weight">Tank Weight</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
 
 </body>
-</html> 
+</html>
 
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
 <script type="text/javascript">
 
-var list = document.getElementById('tanksList');
+    var list = document.getElementById('tanksList');
 
-function openForm() {
-  document.getElementById("myForm").style.display = "block";
-}
+    function openForm() {
+        document.getElementById("myForm").style.display = "block";
+    }
 
-function closeForm() {
-  document.getElementById("myForm").style.display = "none";
-} 
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
 
-/*
-var savePic = function(event) {
-  image.src = URL.createObjectURL(event.target.files[0]);
-};
-*/
+    /*
+    var savePic = function(event) {
+      image.src = URL.createObjectURL(event.target.files[0]);
+    };
+    */
 
-fetch("http://localhost:3000/tanks")
-  .then(response => response.json())
-  .then(data => {
-    data.forEach((tank) => {
-      var li = document.createElement("li");
-
-      var img = document.createElement("img")
-      img.setAttribute("src", tank.name + ".jpg");
-      li.appendChild(img);
-
-      var head = document.createElement("h3")
-      head.innerHTML = tank.name;
-      li.appendChild(head);
-
-      var wid = document.createElement("p")
-      wid.innerHTML = "Width: " + tank.width + "m.";
-      li.appendChild(wid);
-
-      var len = document.createElement("p")
-      len.innerHTML = "Lenght: " + tank.lenght + "m.";
-      li.appendChild(len);
-
-      var hei = document.createElement("p")
-      hei.innerHTML = "Height: " + tank.height + "m.";
-      li.appendChild(hei);
-
-      var wei = document.createElement("p")
-      wei.innerHTML = "Weight: " + tank.width + "t.";
-      li.appendChild(wei);
-
-      list.appendChild(li);
-    })
-});
+    function getTanks() {
+        fetch("http://localhost:3000/tanks")
+            .then(response => response.json())
+            .then(mydata => {
+                $('#table').bootstrapTable({
+                    data: mydata
+                });
+            });
+    }
 </script>
