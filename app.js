@@ -49,11 +49,12 @@ app.get("/tanks", function (request, response){
 });
 
 //search tank
-app.post('/search', function(request, response){
+app.get('/search', function(request, response){
   var term = request.body.input;
 
   con.query("SELECT * FROM tanks WHERE name = \"" + term + "\"", function (err, result, fields) {
-    if (err) throw err;   
+      if (err) throw err;
+      response.json(result);
   });
 });
 
